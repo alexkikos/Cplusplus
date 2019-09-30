@@ -1,0 +1,925 @@
+#include<iostream>
+#include<iomanip>
+#include<cmath>
+#include<Windows.h>
+#include<algorithm>
+#include<typeinfo>
+#include<string>
+
+
+using namespace std;
+void ShowMenu(string user_name, int money[], int shopelik[], int shop_elik, int bagelik[], int bag_elik, int pricehp, int priceelik, int pricecoin);
+void Shop(string user_name, int shop[], int shop_elik_count, int bag[], int bag_count, int money[], int pricehp, int priceelik, int pricecoin);
+void ShowStat(string user, int money[], int shop[], int shop_elik_count, int bag[], int bag_count, int pricehp, int priceelik, int pricecoin);
+
+
+//C++Выделить код
+//1
+//const int NotUsed = system("color 20");
+//2 - значение цвета фона, 0 - значение цвета текста
+//
+//Расшифровка цветов :
+//0 = Black 8 = Gray
+//1 = Blue 9 = Light Blue
+//2 = Green A = Light Green
+//3 = Aqua B = Light Aqua
+//4 = Red C = Light Red
+//5 = Purple D = Light Purple
+//6 = Yellow E = Light Yellow
+//7 = White F = Bright White
+
+
+
+enum ConsoleColor
+{
+	Black = 0, Blue = 1, Green = 2, Cyan = 3, Red = 4, Magenta = 5, Brown = 6, LightGray = 7, DarkGray = 8,
+	LightBlue = 9, LightGreen = 10, LightCyan = 11, LightRed = 12, LightMagenta = 13, Yellow = 14, White = 15
+};
+
+void setcolor(int text, int background)
+{
+	HANDLE hStdOut = GetStdHandle(STD_OUTPUT_HANDLE);
+	SetConsoleTextAttribute(hStdOut, (WORD)((background << 4) | text));
+}
+
+int ConvertCharToInt(char a)
+{
+	int b;
+	return b = (int)a - (int) '0';
+}
+
+void PrintText(int s, int color_text = 1, int color_background = 6)
+{
+	setcolor(color_text, color_background);
+	cout << s;
+	setcolor(White, Black);
+}
+
+
+void PrintText(string s, int a, string g, int color_text = 1, int color_background = 6)
+{
+	setcolor(color_text, color_background);
+	cout << s << a << g;
+	setcolor(White, Black);
+}
+
+void PrintText(int s, string a, int color_text = 1, int color_background = 6)
+{
+	setcolor(color_text, color_background);
+	cout << s << a;
+	setcolor(White, Black);
+}
+
+void PrintText(string s, int color_text = 1, int color_background = 6)
+{
+	setcolor(color_text, color_background);
+	cout << s;
+	setcolor(White, Black);
+}
+
+void PrintText(string s, string s2, int color_text = 1, int color_background = 6)
+{
+	setcolor(color_text, color_background);
+	cout << s << s2;
+	setcolor(White, Black);
+}
+
+void PrintText2(string s, int a, int color_text = 1, int color_background = 0)
+{
+	setcolor(color_text, color_background);
+	cout << s << a;
+	setcolor(White, Black);
+}
+
+void PrintText2(string s, string s1, int a, int color_text = 1, int color_background = 0)
+{
+	setcolor(color_text, color_background);
+	cout << s << s1 << a;
+	cout << endl;
+	setcolor(White, Black);
+}
+
+
+string Greetings()
+{
+	setlocale(LC_ALL, "");
+	system("cls");
+	string user_name;
+	system("color 57");
+	cout << "\t\t\t\Вы запустили игру \"НАЙДИ ПРИЗРАКА\"!!\n";
+	cout << "Введите Ваше имя:";
+	cin >> user_name;
+	return user_name;
+}
+
+//нужно подумать как улучшить построение дверей, то что сейчас то такое
+void Door(int number, int height = 10, int weight = 10)
+{
+	int k = 1;
+	bool check = true;
+	int max = 1;
+	for (int i = 0; i < height; i++)
+	{
+		for (int j = 0; j <= weight * number; j++)
+		{
+			check = true;
+			if (j % weight == 0 and j == 0)
+			{
+				setcolor(Green, Black);
+				cout << "#";
+			}
+			else
+				if (j % weight == 0)
+				{
+
+					setcolor(Green, Black);
+					cout << "#";
+					setcolor(White, Black);
+					cout << "  ";
+					if (j != weight * number)
+					{
+						setcolor(Green, Black);
+						cout << "#";
+						setcolor(White, Black);
+					}
+				}
+			if (i == height / 2 and j % weight == weight / 2)
+			{
+				setcolor(rand() % 14, Yellow);
+				cout << k++;
+				check = false;
+				setcolor(White, Black);
+			}
+			if ((i == 0 and j < (weight * number)) or (i == height - 1 and j < (weight * number)))//верх и низ
+			{
+				setcolor(Yellow, Black);
+				cout << "#";
+				setcolor(White, Black);
+
+			}
+			else
+				if (check and j != weight * number)
+				{
+					if (j < weight * number / number)
+					{
+						setcolor(Yellow, Blue);
+						cout << " ";
+						setcolor(White, Black);
+					}
+					else
+						if (j >= weight * number / number and j < weight * number * 2 / number)
+						{
+							setcolor(Yellow, Red);
+							cout << " ";
+							setcolor(White, Black);
+						}
+						else
+							if (j >= weight * number * 2 / number and j < weight * number * 3 / number)
+							{
+								setcolor(Yellow, Cyan);
+								cout << " ";
+								setcolor(White, Black);
+							}
+							else
+								if (j >= weight * number * 3 / number and j < weight * number * 4 / number)
+								{
+									setcolor(Yellow, Magenta);
+									cout << " ";
+									setcolor(White, Black);
+								}
+								else
+									if (j >= weight * number * 4 / number and j < weight * number * 5 / number)
+									{
+										setcolor(Yellow, 10);
+										cout << " ";
+										setcolor(White, Black);
+									}
+									else
+										if (j >= weight * number * 5 / number and j < weight * number * 6 / number)
+										{
+											setcolor(Yellow, rand() % 14);//9
+											cout << " ";
+											setcolor(White, Black);
+										}
+				}
+		}
+		cout << endl;
+
+	}
+
+}
+
+int  RandExitPlace(int amount_door)
+{
+	srand(time(0));
+	int c = rand() % (amount_door - 1 + 1) + 1;
+	return c;
+}
+
+bool CheckDoors(int  user_choice, int total_door)
+{
+	if (user_choice > total_door)
+	{
+		return false;
+	}
+	else
+		if (user_choice > 0)
+		{
+			return true;
+		}
+		else
+			return false;
+}
+
+bool CheckAnswer(int user_choice, int get_exit)
+{
+	if (user_choice == get_exit)
+	{
+		return true;
+	}
+	else
+		return false;
+}
+
+bool CheckChoice(int start_vibor, int min, int max)
+{
+	for (int i = min; i <= max; i++)
+	{
+		if (start_vibor == i) return true;
+	}
+	return false;
+}
+
+
+
+int  Preset(string user, int bag[])
+{
+
+	PrintText(user, ",тебе необходимо выбрать сложность игры\nСложность - влияет на количество полученных коинов, которые ты можешь потратить в нашем магазине.\nЧем выше сложность, тем больше коинов ты получаешь!\n", 13, 0);
+	PrintText("1. 2 двери - за победу 1 коин а за поражение твои нр уменьшаться на 1 ед.\n", White, 0);
+	PrintText("2. 4 двери - за победу 3 коина а за поражение твои нр уменьшаться на 3 ед.\n", Green, 0);
+	PrintText("3. 6 дверей - за победу 5 коинов а за поражение твои нр уменьшаться на 5 ед.\n", 4, 0);
+next1:
+	PrintText(user, ",сделай выбор: ", Yellow, 0);
+	char next;
+	cin >> next;
+	if (next != '1' and next != '2' and next != '3')
+	{
+
+		cout << endl;
+		PrintText(user, ",ошибка во время ввода, повтори!!!\n", LightGreen, Black);
+		goto next1;
+	}
+	else
+		if (next == '3')
+		{
+			if (bag[2] < 15)
+			{
+				PrintText("\nДанный режим доступен при наличии 15 HP", 7, 0);
+				PrintText("\nВы можете пополнить баланс HP в магазине.\n", 9, 0);
+				goto next1;
+			}
+		}
+	return next;
+}
+
+
+//использование итемов из сумки
+int UserItemFromBag(string user_name, char current_enter, int bag[], int index_bag)
+{
+	char count;
+	if (bag[index_bag] > 0)
+	{
+		cout << user_name << ", сколько использовать?:";
+		cin >> count;
+		if (count < 49 or count > 57)
+		{
+			return 1;//ошибка ввода
+		}
+		int z = ConvertCharToInt(count);
+		if (bag[index_bag] >= z and z != 0)//аски, 49-1 50-2 51-3 52-4 55-5 56-6
+		{
+			PrintText(user_name, ", предмет успешно использован\n", Green, Black);
+			bag[index_bag] -= z;//убрали использованные елики из инвентаря
+			if (index_bag == 1) bag[3] += z;//добавил в массив количество испол эликов удачи
+			if (index_bag == 0) bag[2] += z;//увеличили уровень нр где 1 елик нр = 1 жизнь
+			if (index_bag == 6) bag[7] += z;//увеличили уровень нр где 1 елик нр = 1 жизнь
+			return 0;//успех
+		}
+		else return 2;//мало итемов
+	}
+	else return 2;//мало итемов
+}
+
+
+//Вспомогательная функция для добавления менюшек в инвентарь юзера, перегружены тк разные форматы ввода использовались
+void Add_menu_user_bag(int number_menu, string name_menu, int weight_menu, int space_between_param, int place_where_print, int array[], int index, int color_text, int color_back, char symvol_for_lobbi)
+{
+	for (int i = 0; i < 1; i++)
+	{
+		for (int g = 0; g < weight_menu; g++)
+		{
+			cout << symvol_for_lobbi;
+		}
+		cout << endl;
+		PrintText(number_menu, name_menu, color_text, color_back);
+		for (int c = 0; c < space_between_param; c++)
+		{
+			cout << " ";
+
+			if (c == place_where_print)
+
+			{
+				cout << array[index];
+			}
+		}
+		cout << endl;
+	}
+}
+
+void Add_menu_user_bag(string name_menu, int weight_menu, int space_between_param, int place_where_print, int array[], int index, int color_text, int color_back, char symvol_for_lobbi)
+{
+	for (int i = 0; i < 1; i++)
+	{
+		for (int g = 0; g < weight_menu; g++)
+		{
+			cout << symvol_for_lobbi;
+		}
+		cout << endl;
+		PrintText(name_menu, color_text, color_back);
+		for (int c = 0; c < space_between_param; c++)
+		{
+			cout << " ";
+
+			if (c == place_where_print)
+
+			{
+				cout << array[index];
+			}
+		}
+		cout << endl;
+	}
+}
+
+void Add_menu_user_bag(int nummenu, string name_menu, int weight_menu, int space_between_param, int place_where_print, int array[], int index, int space_between_param2, int place_where_print2, int price_items, string price_string, int color_text, int color_back, char symvol_for_lobbi)//для шопа
+{
+	//для шопа
+	for (int i = 0; i < 1; i++)
+	{
+		for (int g = 0; g < weight_menu; g++)
+		{
+			cout << symvol_for_lobbi;
+		}
+		cout << endl;
+		PrintText(nummenu, name_menu, color_text, color_back);
+		for (int c = 0; c < space_between_param; c++)
+		{
+			cout << " ";
+			if (c == place_where_print)
+			{
+				PrintText(array[index], color_text, color_back);
+			}
+		}
+		for (int c = 0; c < space_between_param2; c++)
+		{
+			cout << " ";
+			if (c == place_where_print2)
+			{
+				PrintText(price_items, color_text, color_back);
+				PrintText(price_string, color_text, color_back);
+			}
+		}
+		cout << endl;
+	}
+}
+
+void Add_menu_user_bag(int number_menu, string name_menu, int weight_menu, int space_between_param, int place_where_print, int color_text, int color_back, char symvol_for_lobbi)
+{
+	for (int i = 0; i < 1; i++)
+	{
+		for (int g = 0; g < weight_menu; g++)
+		{
+			cout << symvol_for_lobbi;
+		}
+		cout << endl;
+		PrintText(number_menu, name_menu, color_text, color_back);
+		for (int c = 0; c < space_between_param; c++)
+		{
+			cout << " ";
+
+		}
+		cout << endl;
+	}
+}
+
+void Add_menu_user_bag(string name_menu, int weight_menu, int space_between_param, int place_where_print, int color_text, int color_back, char symvol_for_lobbi)
+{
+	for (int i = 0; i < 1; i++)
+	{
+		for (int g = 0; g < weight_menu; g++)
+		{
+			cout << symvol_for_lobbi;
+		}
+		cout << endl;
+		PrintText(name_menu, color_text, color_back);
+		for (int c = 0; c < space_between_param; c++)
+		{
+			cout << " ";
+
+		}
+		cout << endl;
+	}
+}
+
+bool User_Bag_Analiz_Menu(string user_name, char user_choice_from_menu, char number_menu_currebt, int array[], int index_array, int text_color, int back_color)
+{
+	int f;
+	char a;
+	bool b = true;
+recheck:
+	if (user_choice_from_menu == number_menu_currebt)
+	{
+		if (array[index_array] == 0)
+		{
+			PrintText("Предметов больше нет!\n", Yellow, Black);
+			b = false;
+		}
+		if (b == false)
+		{
+			PrintText("Для продолжения нажми любую клавишу", Yellow, Black);
+			cin >> a;
+			return 0;
+		}
+		f = UserItemFromBag(user_name, number_menu_currebt, array, index_array);
+		if (f == 2)
+		{
+			PrintText("Нету столько итемов!!\n", Yellow, Black);
+			goto recheck;
+		}
+		else
+			if (f == 1)
+			{
+				PrintText("\nОшибка ввода\n", Red, Black);
+				goto recheck;
+			}
+			else
+				PrintText("Для продолжения нажми любую клавишу", Yellow, Black);
+		cin >> a;
+		return 1;
+
+	}
+	else return 0;
+}
+
+
+//Показываем инвентарь юзера
+void Show_user_bag(string user_name, int shop[], int shop_elik_count, int bag[], int bag_index, int money[], int pricehp, int priceelik, int pricecoin)
+{
+
+	system("cls");
+	system("color 07");
+	PrintText("\t\t\tИнвентарь игрока: ", user_name, 6, Black);
+	cout << endl;
+	cout << endl;
+	PrintText("\tИтемы\t\t\tКоличество", 13, Black);
+	cout << endl;
+	Add_menu_user_bag("Количество коинов", 56, 25, 19, money, 0, 2, Black, '-');// bagelik элик нр, 0 /элик удачи, 1 / количество нр 2/испол елик удачи 3 /победы 4 /лузы 5/ свитки опыта 6
+	Add_menu_user_bag(1, ". Эликсиры жизни", 56, 21, 19, bag, 0, 3, 0, '-');//создаем нужные менюшки
+	Add_menu_user_bag(2, ". Эликсиры удачи", 56, 21, 19, bag, 1, 4, 0, '-');//создаем нужные менюшки
+	Add_menu_user_bag(3, ". Свиток опыта", 56, 23, 21, bag, 6, 7, 0, '-');//создаем нужные менюшки
+	Add_menu_user_bag(4, ". Использовать предмет", 56, 17, 13, 5, 0, '-');//перегружаю тк нету массива
+	Add_menu_user_bag(5, ". Возврат в старт меню", 56, 17, 13, 6, 0, '-');//также
+	Add_menu_user_bag("", 56, 25, 17, 2, Black, '-');
+rep:
+	cout << endl;
+	PrintText(user_name, ", сделай выбор меню: ", 9, Black);
+	cout << endl;
+	char choice;
+	cin >> choice;
+	if (choice != '4' and choice != '5')//аски, 49-1 50-2 51-3 52-4 55-5 56-6
+	{
+		cout << endl;
+		PrintText(user_name, ",ошибка во время ввода, повтори!\n", Red, Black);
+		goto rep;
+	}
+	switch (choice)
+	{
+	case '4':
+	re1:
+		cout << endl;
+		cout << user_name << ", введи номер предмета для испольования (номер меню эликсиров): ";
+		cin >> choice;
+		if (choice != '1' and choice != '2' and choice != '3')//проверяю правильность ввода
+		{
+			cout << endl;
+			PrintText(user_name, ",ошибка во время ввода, повтори!!!\n", Red, Black);//если не попали не в одну из наших меню
+			goto re1;
+		}
+		User_Bag_Analiz_Menu(user_name, choice, '1', bag, 0, 7, 0);//добавляю анализ менюшек		
+		User_Bag_Analiz_Menu(user_name, choice, '2', bag, 1, 8, 0);
+		User_Bag_Analiz_Menu(user_name, choice, '3', bag, 6, 8, 0);
+		Show_user_bag(user_name, shop, shop_elik_count, bag, bag_index, money, pricehp, priceelik, pricecoin);// рекурсия для обновления информации		
+	case '5':
+		break;
+	}
+}
+
+
+//Информационное меню старта игры
+void ShowInfo(string user)
+{
+	system("cls");
+	char choice;
+	PrintText("1. Смысл игры заключается в поиске двери с призраком. Если призрака удалось найти - получаешь бонусы, в противном случае ты тярешь свои уровни НР.\n", Yellow, Black);
+	PrintText("2. Игра состоит из 3 уровней сложности, чем выше уровень, тем больше коинов ты получаешь, но и теряешь больше HP.\n", Yellow, Black);
+	PrintText("3. При старте игры, тебе по умолчанию начисляется 10 коинов, 10 жизней, и по 1 из каждого эликсира.\n", Yellow, Black);
+	PrintText("4. Эликсир жизни, восстанавливает уровень НР на 1 ед.\n", Yellow, Black);
+	PrintText("5. В игре есть раздел Статистика, где публикуется вся информация о персонаже.\n", Yellow, Black);
+	PrintText("6. Инвентарь - хранит все ваши предметы.\n", Yellow, Black);
+	PrintText("7. Коины - игровая валюта, которая тратится в Магазине.\n", Yellow, Black);
+	PrintText("8. Свиток опыта - повышает в 2 раза количество добытых коинов в бою, использовать можно из раздела Инвентарь перед началом боя, расходуется только при победе.\n", Yellow, Black);
+	PrintText("9. Эликсир удачи - если вы не нашли призрака, эликсир удачи сделает это за Вас. Действие происходит только при неудачном выборе.\n", Yellow, Black);
+rep:
+	PrintText("Для возврата нажмите 2", Green, 0);
+	cin >> choice;
+	if (choice != '2')
+	{
+		PrintText("\nОшибка ввода\n", Red, 0);
+		goto rep;
+	}
+}
+
+void ShowMenu(string user, int money[], int shop[], int shop_elik_count, int bag[], int bag_count, int pricehp, int priceelik, int pricecoin)
+{
+first:
+	setlocale(LC_ALL, "");
+	bool check = true;;
+	system("cls");
+	system("color 07");//черн белый
+	char choice;
+	PrintText("1. Начать игру\n", 2, 0);
+	PrintText("2. Показать статистику\n", 14, 0);
+	PrintText("3. Магазин\n", 12, 0);
+	PrintText("4. Инвентарь\n", LightMagenta, 0);
+	PrintText("5. Информация\n", 11, 0);
+	PrintText("6. Выход из игры\n", Red, 0);
+	PrintText(user, ",сделай выбор: ", Green, 0);
+rep:
+	cin >> choice;
+	if (choice != '1' and choice != '2' and choice != '3' and choice != '4' and choice != '5' and choice != '6')//аски, 49-1 50-2 51-3 52-4 55-5 56-6
+	{
+		PrintText(user, ",ошибка во время ввода, повтори!!!\n", Red, Yellow);
+		goto rep;
+	}
+	switch (choice)
+	{
+	case '1': check = false; break;
+	case '2': ShowStat(user, money, shop, shop_elik_count, bag, bag_count, pricehp, priceelik, pricecoin); break;
+	case '3': Shop(user, shop, shop_elik_count, bag, bag_count, money, pricehp, priceelik, pricecoin); break;
+	case '4': Show_user_bag(user, shop, shop_elik_count, bag, bag_count, money, pricehp, priceelik, pricecoin); break;
+	case '5': ShowInfo(user); 	break;
+	case '6': check = false; exit(0); 	break;
+	}
+	if (check) goto first;
+}
+
+void Buy_item_Menu_shop(string user, int money[], int bag[], int index_bag, int item_price, int shop[], int index_shop)
+{
+	char amount1;
+	char choice;
+	int z;
+	system("cls");
+Repamount2:
+	PrintText("\nПокупка предмета, введите количество:", Yellow, Black);
+	cout << endl;
+	cin >> amount1;
+	z = ConvertCharToInt(amount1);
+	if (amount1 > 57 or amount1 < 49) //чойс видит как десятичный, подтягиваем значения по аски
+	{
+		cout << endl;
+		PrintText(user, ", ошибка во время ввода, повтори!!!\n", Green, Black);
+		goto Repamount2;
+	}
+	if (money[0] < z * item_price)
+	{
+		cout << endl;
+		PrintText(user, ", у вас недостаточно средств!\n", Red, Black);
+		PrintText(user, ", Нажмите любую кнопку для возврата", Red, Black);
+		cin >> choice;
+	}
+	else
+		if (money[0] >= z * item_price and shop[index_shop] >= z)
+		{
+			PrintText(user, ", покупка прошла успешно!\n", 10, 0);
+			shop[index_shop] -= z;//елики в магазе доступные
+			bag[index_bag] += z;//елики в инвентаре
+			money[0] -= z * item_price;//деньги в инвентаре
+			PrintText(user, ", Нажмите любую кнопку для возврата", Yellow, Black);
+			cin >> choice;
+		}
+		else
+		{
+			PrintText(user, ", Предметы закончились!, попробуйте в другой раз!\n", rand()%14, 0);
+			PrintText(user, ", Нажмите любую кнопку для возврата", Yellow, Black);
+			cin >> choice;
+		}
+	cout << endl;
+}
+
+//Магазин наших предметов
+void Shop(string user_name, int shop[], int shop_elik_count, int bag[], int bag_count, int money[], int pricehp, int priceelik, int pricecoin)
+{
+Start:
+	system("cls");
+	char amount1;
+	int z;
+	PrintText("\t\t    Магазин игры\n\tВесь товар в ограниченном количестве!", 13, Black);
+	cout << endl;
+	PrintText("\n\tИтемы\t\t    Количество\t\tЦена", 11, Black);
+	cout << endl;
+	Add_menu_user_bag(1, ". Количество коинов", 63, 14, 12, shop, 2, 18, 13, pricecoin, " грн./ед", 10, Black, '-');////shopelik первый элики нр 0, элики удачи 1, коины 2, opit 3 
+	Add_menu_user_bag(2, ". Эликсиры жизни: ", 63, 14, 13, shop, 0, 22, 14, pricehp, " ед/коин", 11, Black, '-');//создаем нужные менюшки
+	Add_menu_user_bag(3, ". Эликсиры удачи: ", 63, 14, 13, shop, 1, 22, 14, priceelik, " ед/коин", 12, Black, '-');//создаем нужные менюшки
+	Add_menu_user_bag(4, ". Свиток опыта: ", 63, 16, 15, shop, 3, 22, 14, priceelik, " ед/коин", 9, Black, '-');//создаем нужные менюшки
+	Add_menu_user_bag(5, ". Вернуться обратно", 63, 14, 10, 14, Black, '-');//создаем нужные менюшки
+rep:
+	cout << endl;
+	PrintText(user_name, ", сделай выбор: ", 12, 0);
+	char choice;
+	cin >> choice;
+	if (choice != '1' and choice != '2' and choice != '3' and choice != '4' and choice != '5')//аски, 49-1 50-2 51-3 52-4 55-5 56-6
+	{
+		cout << endl;
+		PrintText(user_name, ", ошибка во время ввода, повтори!!!\n", Red, Black);
+		goto rep;
+	}
+	switch (choice)
+	{
+	case '1':
+		system("cls");
+	Repamount:
+		PrintText("\nПокупка коинов, введите количество - до 9шт за 1 покупку!!!!:", Yellow, Black); //покупка коинов
+		cin >> amount1;
+		z = ConvertCharToInt(amount1);
+		if (z > shop[2])//аски, 49-1 50-2 51-3 52-4 55-5 56-6
+		{
+			cout << endl;
+			PrintText(user_name, ", столько итемов нету в магазине\n", Red, Black);
+			PrintText(user_name, ", Для продолжения нажмите любую клавишу", Yellow, Black);
+			cin >> amount1;
+			goto Start;
+		}
+		if (amount1 > 57 or amount1 < 49) //чойс видит как десятичный, подтягиваем значения по аски
+		{
+			cout << endl;
+			PrintText(user_name, ", ошибка во время ввода, повтори!!!\n", Green, Black);
+			goto Start;
+		}
+
+		PrintText("\nОтправьте смс с кодом: ", z * pricecoin, " на номер 380971720643\n", LightGreen, Black);
+		cout << endl;
+	rep1:
+		PrintText(user_name, ", как отправите смс нажмите 1/2-выход:", LightRed, 0);
+		cin >> choice;
+		if (choice != '1' and choice != '2')//аски, 49-1 50-2 51-3 52-4 55-5 56-6
+		{
+			cout << endl;
+			PrintText(user_name, ", ошибка во время ввода, повтори!!!\n", Red, Black);
+			goto rep1;
+		}
+		if (choice == '1')
+		{
+			PrintText(user_name, ", отлично, оплата принята!!!\n", Green, 0);
+			PrintText(user_name, ", для продолжения нажми 1", Green, 0);
+			shop[2] -= z;//коины в магазе
+			money[0] += z;//свои коины
+			goto Start;// возврат в начальное меню
+		}
+		else 	goto Start;// возврат в начальное меню	
+		break;
+	case '2':	Buy_item_Menu_shop(user_name, money, bag, 0, pricehp, shop, 0); goto Start; break;
+	case '3':	Buy_item_Menu_shop(user_name, money, bag, 1, priceelik, shop, 1); goto Start; break;
+	case '4':	Buy_item_Menu_shop(user_name, money, bag, 6, priceelik, shop, 3);  goto Start;  break;
+	default: break;
+	}
+}
+
+void ShowStat(string user, int money[], int shop[], int shop_elik_count, int bag[], int bag_count, int pricehp, int priceelik, int pricecoin)
+{
+	system("cls");
+	PrintText("\t\t\tЛобби игрока:", user, 2, Black);
+	cout << endl;
+	cout << endl;
+	PrintText("\tНазвание\t\tКоличество", 13, Black);
+	cout << endl;
+	Add_menu_user_bag("Количество коинов", 45, 25, 19, money, 0, 11, Black, '=');
+	Add_menu_user_bag("Количество HP", 45, 25, 23, bag, 2, 12, Black, '=');
+	Add_menu_user_bag("Количество побед", 45, 25, 20, bag, 4, 13, Black, '=');//bag элик нр, 0 /элик удачи, 1 / количество нр 2/испол елик удачи 3 /победы 4 /лузы 5
+	Add_menu_user_bag("Количество поражений", 45, 25, 16, bag, 5, 14, Black, '=');
+	Add_menu_user_bag("", 45, 25, 17, 2, Black, '=');
+	PrintText("\nДля возвращения назад, нажмите любую клавишу\n", White, Black);
+	char next;
+	cin >> next;
+}
+
+
+//Панель пол.еффектом
+void Show_Buff_Panel(string name_item, int bag[], int index_item_bag, int color, int color_back, int weight_panel)
+{
+	// bagelik элик нр, 0 /элик удачи, 1 / количество нр 2/испол елик удачи 3 /победы 4 /лузы 5
+	if (bag[index_item_bag] > 0)
+	{
+		for (int i = 0; i < weight_panel; i++)
+		{
+			cout << "=";
+		}
+		cout << endl;
+		PrintText2(name_item, bag[index_item_bag], color, color_back);
+		cout << endl;
+		for (int i = 0; i < weight_panel; i++)
+		{
+			cout << "=";
+		}
+		cout << endl;
+	}
+}
+
+
+//Возвращаем полученные бонусы исходя из свитков опыта
+int CheckOpit(int bonus[], int index_bonus, int bag[], int index_bag, int money[], bool find = true)
+{
+	if (bag[index_bag] > 0)
+	{
+		bag[index_bag] -= 1;
+		money[0] += bonus[index_bonus] * 2;
+		return bonus[index_bonus] * 2;
+	}
+	else
+	{
+		money[0] += bonus[index_bonus];
+		return bonus[index_bonus];
+	}
+}
+
+
+
+//Начало игры, запуск и инициализация всех меню
+void GameStart(string user_name, int amount_door1, int amount_door2, int amount_door3, int money[], int bag[], int bonus[])
+{
+Start:
+	system("cls");
+	int index_bonus;	
+	int get_exit;
+	int max;
+	bool metka = true;
+	char user_choice;
+	bool getbonus = false;
+	char start_vibor = Preset(user_name, bag);
+
+	switch (start_vibor)
+	{
+	case '1':
+		if (bag[2] >= bonus[0])//если елик опыта не заюзан входим
+		{
+			system("cls");
+			PrintText(user_name, ", тебе нужно угадать дверь с призраком, угадаешь? - получишь бонусы, иначе уровень здоровья уменьшиться\n", rand() % 14, 0);
+			Door(amount_door1); get_exit = RandExitPlace(amount_door1);  max = amount_door1; index_bonus = 0;
+		}
+			else
+			{
+				PrintText("Проверьте в разделе Статистика, уровень Ваших НР. В данный момент вы не можете вступить в игру!!", 4, Black);
+				PrintText("\nДля возврата нажмите любую клавишу", 4, Black);
+				cin >> user_choice;
+				metka = false;
+			}		
+		break;//аски, 49-1 50-2 51-3 52-4 55-5 56-6
+	case '2':
+		if (bag[2] >= bonus[1])
+		{
+			system("cls");
+			PrintText(user_name, ", тебе нужно угадать дверь с призраком, угадаешь? - получишь бонусы, иначе уровень здоровья уменьшиться\n", rand() % 14, 0);
+			Door(amount_door2); get_exit = RandExitPlace(amount_door2); max = amount_door2;  index_bonus = 1;
+		}
+			else
+			{
+				PrintText("Проверьте в разделе Статистика, уровень Ваших НР. В данный момент вы не можете вступить в игру!!", 4, Black);
+				PrintText("\nДля возврата нажмите любую клавишу", 4, Black);
+				cin >> user_choice;
+				metka = false;
+			}
+		
+		break;//аски, 49-1 50-2 51-3 52-4 55-5 56-6
+	case '3':
+		if (bag[2] >= bonus[2])
+		{
+			system("cls");
+			PrintText(user_name, ", тебе нужно угадать дверь с призраком, угадаешь? - получишь бонусы, иначе уровень здоровья уменьшиться\n", rand() % 14, 0);
+			Door(amount_door3); get_exit = RandExitPlace(amount_door3);  max = amount_door3; index_bonus = 2;
+		}
+			else
+			{
+				PrintText("Проверьте в разделе Статистика, уровень Ваших НР. В данный момент вы не можете вступить в игру!!", 4, Black);
+				PrintText("\nДля возврата нажмите любую клавишу", 4, Black);
+				cin >> user_choice;
+				metka = false;
+			}
+		
+		break;//аски, 49-1 50-2 51-3 52-4 55-5 56-6
+	}
+
+Start1:
+	if (metka)
+	{
+		cout << endl;
+		Show_Buff_Panel("Количество эликсиров удачи на персонаже: ", bag, 3, 11, Black, 55);// bagelik элик нр, 0 /элик удачи, 1 / количество нр 2/испол елик удачи 3 /победы 4 /лузы 5/6 opit svitok
+		Show_Buff_Panel("Количество свитков опыта на персонаже: ", bag, 7, 13, Black, 55);// bagelik элик нр, 0 /элик удачи, 1 / количество нр 2/испол елик удачи 3 /победы 4 /лузы 5/6 opit svitok
+		cout << endl;
+		PrintText(user_name, ",сделай выбор: ", White, Black);
+		cin >> user_choice;
+		int format = ConvertCharToInt(user_choice);
+		if (user_choice > 55 or user_choice < 49 or format > max) //чойс видит как десятичный, подтягиваем значения по аски
+		{
+			cout << endl;
+			PrintText(user_name, ",ошибка во время ввода, повтори!!!\n", Green, Black);
+			goto Start1;
+		}
+		if (get_exit == format)
+		{
+			int bonus_value = CheckOpit(bonus, index_bonus, bag, 7, money,false);//false если юзер сам угодал то елик удачи не списываем
+			getbonus = true;
+			PrintText2(user_name, ", поздравляем, Вы нашли Призрака и получаете бонус = ", bonus_value, Green, Black);
+			bag[4] += 1;
+			cout << endl;
+		}
+		else
+			if (get_exit != format and bag[3] < 1)
+			{
+				PrintText2(user_name, ", тебе не удалось найти призрака, твое нр уменьшилось!.\nДверь с призраком была под №: ", get_exit, 10, Black);
+				bag[2] -= bonus[index_bonus];
+				bag[5] += 1;
+				cout << endl;
+			}
+			else
+			{
+				int bonus_value = CheckOpit(bonus, index_bonus, bag, 7, money);//заносит размер бонуса для дальнейших расчетов
+				getbonus = true;
+				PrintText2(user_name, ", поздравляем, Вы нашли призрака с помощью \"Эликсира удачи\" и получаете бонус = ", bonus_value, Yellow, Black);
+				bag[4] += 1;
+				bag[3] -= 1;				
+				cout << endl;
+			}
+	}
+next1:
+	PrintText("\nДля продолжения нажмите  клавишу 1\nДля выхода в меню - 2", 4, Black);
+	char next;
+	cin >> next;
+	if (next != '1' and next != '2')
+	{
+		PrintText(user_name, ",ошибка во время ввода, повтори!!!\n", LightGreen, Black);
+		goto next1;
+	}
+	else
+		if (next == '1') goto Start;
+
+}
+
+
+
+int main()
+{
+	setlocale(LC_ALL, "");
+	string user_name;
+	const int cash = 1;
+	int money[cash] = { 10 }; //второй индекс для магазина
+
+
+	const int shop_elik = 4;
+	int shopelik[shop_elik] = { 50,50,40,30 }; //shopelik первый элики нр 0, элики удачи 1, коины 2, opit 3 
+
+	const int bag_elik = 8;//храним елики и свитки, информация о боях тоже тут, нужно было создать отд массив ....
+	int bagelik[bag_elik] = { 1,1,10,0,0,0,1,0 };// bagelik элик нр, 0 /элик удачи, 1 / количество нр 2/испол елик удачи 3 /победы 4 /лузы 5/ свитки опыта 6 / 7 заюзанные свитки опыта
+
+
+	const int bonus = 3;
+	int ar_bnonus[bonus] = { 1,3,5 }; //храним наши бонусы
+
+
+	int amount_door1 = 2;//при смене количества дверей, нужно поменять аски номера max в gamestart
+	int amount_door2 = 4;
+	int amount_door3 = 6;
+	int pricehp = 2;
+	int priceelik = 5;
+	int pricecoin = 2;
+	user_name = Greetings();//get name
+
+	while (true)
+	{
+		system("cls");	
+		ShowMenu(user_name, money, shopelik, shop_elik, bagelik, bag_elik, pricehp, priceelik, pricecoin);
+		system("cls");
+		system("color 07");//черн белый		
+		GameStart(user_name, amount_door1, amount_door2, amount_door3, money, bagelik, ar_bnonus);
+	}
+	system("pause");
+	return 0;
+}
