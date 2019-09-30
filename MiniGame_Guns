@@ -1,0 +1,233 @@
+
+
+
+
+void(*message(int h))()
+{
+	if (h < 12)
+	{
+		return GoodMon;
+	}
+	else return GodEvening;
+}
+
+
+int(*action())(int, int)
+{
+	int(*oper[])(int, int) = { Sum,Mult,Div };
+	int choice;
+	cout << "Выбрать операцию 1 '+' 2 '*' 3 '/' : ";
+	cin >> choice;
+	return oper[choice - 1];
+}
+
+
+
+
+void Gun(int* b)
+{
+
+	cout << "+-- ^ ----------, --------, ---- - , -------- ^ -, " << endl;
+	cout << "| |||||||||   `------- - '        |              0 " << endl;
+	cout << "`+------------------------------- ^ -------------|" << endl;
+	cout << "   `\_, -------- - , -------- - , -----------'" << endl;
+	cout << "     / XXXXXX /'|       /'" << endl;
+	cout << "    / XXXXXX / ` \     / '" << endl;
+	cout << "   / XXXXXX / `-------'" << endl;
+	cout << "  / XXXXXX /" << endl;
+	cout << " / XXXXXX /" << endl;
+	cout << "(________(" << endl;
+	cout << "`----- - ' " << endl;
+
+	b[0] -= 1;
+	cout << endl;
+}
+
+
+void Riffle(int* b)
+{
+	cout << "________________________________________¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶" << endl;
+	cout << "	_______________________________¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶__" << endl;
+	cout << "________________________¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶_____________" << endl;
+	cout << "	__________________¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶________________" << endl;
+	cout << "	_________________¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶______________________" << endl;
+	cout << "	¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶_________________________" << endl;
+	cout << "	¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶_¶_¶¶¶¶¶¶¶¶_________________________" << endl;
+	cout << "	¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶__¶¶¶¶¶___¶__¶¶¶¶¶¶________________________" << endl;
+	cout << "	_¶¶¶¶¶¶¶¶¶¶¶¶____¶¶¶¶¶¶¶¶¶___¶¶¶¶¶¶_______________________" << endl;
+	cout << "	__¶¶¶¶¶¶¶¶¶______¶¶¶¶¶_______¶¶¶¶¶¶¶______________________" << endl;
+	cout << "	___¶¶¶¶¶¶________¶¶¶¶¶_________¶¶¶¶¶¶¶____________________" << endl;
+	cout << "	____¶¶¶¶_________¶¶¶¶¶__________¶¶¶¶¶¶¶¶__________________" << endl;
+	cout << endl;
+	b[1] -= 10;
+}
+
+
+void Arrow(int* b)
+{
+
+	cout << "			 4$$ - ." << endl;
+	cout << "			 4 ." << endl;
+	cout << "			 4 ^ ." << endl;
+	cout << "			 4     $" << endl;
+	cout << "			 4     'b" << endl;
+	cout << "			 4       b." << endl;
+	cout << "			 4        $" << endl;
+	cout << "			 4        $r" << endl;
+	cout << "			 4        $F" << endl;
+	cout << "- $b========4========$b====>>=->>" << endl;
+	cout << "			 4		  $$F" << endl;
+	cout << "			 4        $$" << endl;
+	cout << "			 4		.$F" << endl;
+	cout << "			 4      dP" << endl;
+	cout << "			 4     F" << endl;
+	cout << "			 4    @" << endl;
+	cout << "			 4  ." << endl;
+	cout << "			 J." << endl;
+	cout << endl;
+	b[2] -= 1;
+}
+
+
+int findMaxelem(int* a, int number, bool c = true)
+{
+
+	int max = a[0], imax = 0;
+	for (int i = 0; i < number; i++)
+	{
+		if (c)
+		{
+			if (a[i] > max)
+			{
+				max = a[i];
+				imax = i;
+			}
+		}
+		else
+		{
+			if (max > a[i])
+			{
+				max = a[i];
+				imax = i;
+			}
+		}
+
+	}
+	return imax;
+}
+
+void(*shot(int* b))(int*)
+{
+	int max = findMaxelem(b, 3);
+	void(*action[])(int*) = { Gun, Riffle, Arrow };
+	if (max == 1 and b[max] > 9)
+	{
+		return action[max];
+	}
+	else
+		if (b[max] > 0)
+		{
+			return action[max];
+		}
+		else
+		{
+			return NULL;
+		}
+
+}
+
+
+void finder1(int a)
+{
+
+	cout << "  _________________" << endl;
+	cout << "/ \________;;________\"\"" << endl;
+	cout << "| /                 /" << endl;
+	cout << "` .   ())oo()     ." << endl;
+	cout << "  | \(% () * ^^() ^|" << endl;
+	cout << " %|  |-% ----------|" << endl;
+	cout << "%  \ |%   ))       |" << endl;
+	cout << "%   \|% ___________|" << endl;
+	cout << "ВОУ ВЫ НАШЛИ СУНДУК С ПАТРОНАМИ!!! И ИХ КОЛИЧЕСТВО = " << a << endl;
+}
+
+
+
+void addCart(int* a, int index, int amount, bool min = true)
+{
+	cout << "\nТекущее количество боеприпасов:\n";
+	for (int i = 0; i < 3; i++)
+	{
+		cout << i + 1 << "==" << a[i];
+		cout << endl;
+	}
+
+	if (min == false)
+	{
+		int imin = findMaxelem(a, 3, false);
+		a[imin] += amount;
+	}
+	else
+	{
+		if (index > 3 or index < 0) index = 2;//если ввели левый индекс по умолчанию пополним автомат
+		a[index - 1] += amount;
+	}
+	cout << "Пополнение успешно!";
+	cout << "\nколичество боеприпасов после пополнения:\n";
+	for (int i = 0; i < 3; i++)
+	{
+		cout << i + 1 << "==" << a[i];
+		cout << endl;
+	}
+	cout << endl;
+}
+
+
+void FindChest(int *bullet, int &count, int rand_mov_value)
+{
+
+	if (rand_mov_value == count)
+	{
+		system("cls");
+		int c;
+		count = 0;
+		int value = rand() % (30 - 1 + 1) + 1;//количество патронов рандомное
+		finder1(value);
+		cout << "\nВыберите номер оружия для пополнения, 0 - пополнить оружие с минимальным количество патронов: ";
+		cin >> c;
+		if (c > 0)		addCart(bullet, c, value); else addCart(bullet, c, value, false);
+	}
+}
+
+
+int main()
+{
+	setlocale(LC_ALL, "");
+	srand(time(0));
+	int rand_mov_value;
+	int value;
+	int bullet[3] = { 11, 11,11 };// Gun RIffle Arrow
+	void(*action) (int*);
+	int c, count = 0;
+	while (true)
+	{
+		if (count == 0)
+		{
+			rand_mov_value = rand() % 5 + 1;
+		}
+		count++;
+		FindChest(bullet, count, rand_mov_value);
+		action = shot(bullet);
+		if (action != NULL)
+		{
+			action(bullet);
+		}
+		else
+		{
+			cout << "Патроны все закончились!";
+			break;
+		}
+		cin >> c;
+	}
+}
+
