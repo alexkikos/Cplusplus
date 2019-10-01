@@ -44,9 +44,96 @@ void PrintText(string s, int color_text = 1, int color_background = 6)
 	setcolor(White, Black);
 }
 
+
+void Preset()
+{
+	cout << "\t\t\t  _______      ___      .___  ___. _______ " << endl;
+	cout << "\t\t\t /  _____|    /   \\    |   \\/  ||   ____|" << endl;
+	cout << "\t\t\t|  |  __     /  ^  \\   |  \\  / ||  |__   " << endl;
+	cout << "\t\t\t|  | |_ |   /  /_\\  \\ |  |\\/| ||   __|  " << endl;
+	cout << "\t\t\t|  |__| |  /  _____  \\ |  |  |  ||  |____ " << endl;
+	cout << " \t\t\t\\______| /__/     \\__|__|  |__||_______|" << endl;
+	cout << "" << endl;
+}
+
+void Preset2()
+{
+	cout << "\t\t\t     _______..___________.     ___     .______      .___________." << endl;
+	cout << "\t\t\t   /       ||           |    /   \\    |   _  \\     |           |" << endl;
+	cout << "\t\t\t  |   (----``---|  |----`   /  ^  \\   |  |_)  |    `---|  |----`" << endl;
+	cout << "\t\t\t    \\   \\        |  |       /  /_\\  \\  |      /         |  |     " << endl;
+	cout << "\t\t\t.----)   |       |  |      /  _____  \\ |  |\\  \\----.    |  |     " << endl;
+	cout << "\t\t\t|_______/        |__|     /__/     \\__\\| _| `._____|    |__|     " << endl;
+	cout << "" << endl;
+}
+
+
+void Preset3()
+{
+	system("cls");
+	cout << "\t\t\t ____    " << endl;
+	cout << "\t\t\t|___ \\   " << endl;
+	cout << "\t\t\t  __) |  " << endl;
+	cout << "\t\t\t |__ <   " << endl;
+	cout << "\t\t\t ___) |  " << endl;
+	cout << "\t\t\t|____/   " << endl;
+	cout << "" << endl;
+
+}
+
+
+void Preset4()
+{
+	system("cls");
+	cout << "\t\t\t ___     " << endl;
+	cout << "\t\t\t|__ \\    " << endl;
+	cout << "\t\t\t   ) |   " << endl;
+	cout << "\t\t\t  / /    " << endl;
+	cout << "\t\t\t / /_    " << endl;
+	cout << "\t\t\t|____|   " << endl;
+	cout << "" << endl;
+
+}
+
+
+
+void Preset5()
+{
+	system("cls");
+	cout << "\t\t\t __    " << endl;
+	cout << "\t\t\t/_ |   " << endl;
+	cout << "\t\t\t | |   " << endl;
+	cout << "\t\t\t | |   " << endl;
+	cout << "\t\t\t | |   " << endl;
+	cout << "\t\t\t |_|   " << endl;
+	cout << "" << endl;
+
+
+}
+
+
+void Preset6()
+{
+	system("cls");
+	cout << "\t\t  _______   ______  " << endl;
+	cout << "\t\t /  _____| /  __  \\ " << endl;
+	cout << "\t\t|  |  __  |  |  |  |" << endl;
+	cout << "\t\t|  | |_ | |  |  |  |" << endl;
+	cout << "\t\t|  |__| | |  `--'  |" << endl;
+	cout << " \t\t\\______|  \\______/ " << endl;
+	cout << "" << endl;
+
+}
+
+
+
+
+
+
 void Gun(int* b)
 {
 	cout << endl;
+	setcolor(rand() % 14+1, 0);
 	cout << "+-- ^ ----------, --------, ---- - , -------- ^ -, " << endl;
 	cout << "| |||||||||   `------- - '        |              0 " << endl;
 	cout << "`+------------------------------- ^ -------------|" << endl;
@@ -66,6 +153,7 @@ void Gun(int* b)
 
 void Riffle(int* b)
 {
+	setcolor(rand() % 14+1, 0);
 	cout << endl;
 	cout << "________________________________________¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶" << endl;
 	cout << "	_______________________________¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶__" << endl;
@@ -86,6 +174,7 @@ void Riffle(int* b)
 
 void Arrow(int* b)
 {
+	setcolor(rand() % 14+1, 0);
 	cout << endl;
 	cout << "			 4$$ - ." << endl;
 	cout << "			 4 ." << endl;
@@ -108,7 +197,9 @@ void Arrow(int* b)
 	cout << endl;
 	b[2] -= 1;
 
+
 }
+
 
 
 bool CheckAmunitions(int* a, int number, int minshot)
@@ -232,7 +323,6 @@ void UserValue(int* b, int count, int index)//индекс 2 для защиты
 
 void addCart(int* a, int index, int amount, void(*addvalue)(int* b, int count, int index2) = MinValue)
 {
-
 	PrintText("\nТекущее количество боеприпасов : \n", 5, 0);
 	for (int i = 0; i < 3; i++)
 	{
@@ -249,8 +339,6 @@ void addCart(int* a, int index, int amount, void(*addvalue)(int* b, int count, i
 	}
 	cout << endl;
 }
-
-
 
 
 
@@ -306,9 +394,16 @@ int main()
 	int bullet[3] = {25,25,25};// Gun RIffle Arrow
 	void(*action) (int*);
 	void(*shot_specific[3])(int* b) = { Gun, Riffle, Arrow };
+	void(*preset[6])() = { Preset, Preset2, Preset3, Preset4, Preset5, Preset6 };
 	int count = 0;
 	int choice;
 	char c;
+	for (int i = 0; i < 6; i++)
+	{
+		setcolor(rand() % 14+1, 0);
+		preset[i]();
+		Sleep(2000);
+	}
 	do
 	{
 		if (count == 0)
