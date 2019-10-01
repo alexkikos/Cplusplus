@@ -130,10 +130,11 @@ void Preset6()
 
 
 
+
 void Gun(int* b)
 {
 	cout << endl;
-	setcolor(rand() % 14+1, 0);
+	setcolor(rand() % 14 + 1, 0);
 	cout << "+-- ^ ----------, --------, ---- - , -------- ^ -, " << endl;
 	cout << "| |||||||||   `------- - '        |              0 " << endl;
 	cout << "`+------------------------------- ^ -------------|" << endl;
@@ -153,7 +154,7 @@ void Gun(int* b)
 
 void Riffle(int* b)
 {
-	setcolor(rand() % 14+1, 0);
+	setcolor(rand() % 14 + 1, 0);
 	cout << endl;
 	cout << "________________________________________¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶" << endl;
 	cout << "	_______________________________¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶__" << endl;
@@ -168,13 +169,13 @@ void Riffle(int* b)
 	cout << "	___¶¶¶¶¶¶________¶¶¶¶¶_________¶¶¶¶¶¶¶____________________" << endl;
 	cout << "	____¶¶¶¶_________¶¶¶¶¶__________¶¶¶¶¶¶¶¶__________________" << endl;
 	cout << endl;
-	b[1] -= 10;
+	b[2] -= 10;
 }
 
 
 void Arrow(int* b)
 {
-	setcolor(rand() % 14+1, 0);
+	setcolor(rand() % 14 + 1, 0);
 	cout << endl;
 	cout << "			 4$$ - ." << endl;
 	cout << "			 4 ." << endl;
@@ -195,11 +196,10 @@ void Arrow(int* b)
 	cout << "			 4  ." << endl;
 	cout << "			 J." << endl;
 	cout << endl;
-	b[2] -= 1;
+	b[1] -= 1;
 
 
 }
-
 
 
 bool CheckAmunitions(int* a, int number, int minshot)
@@ -252,24 +252,26 @@ int findMaxelemofArray(int* a, int number, bool(*check)(int b, int max1) = FindM
 
 void(*shot(int* b))(int*)
 {
+
 	int min;
 	int max = findMaxelemofArray(b, 3);
-	void(*action[])(int*) = { Gun, Riffle, Arrow };
-	(max == 1) ? min = 10 : min = 1;
-	if (CheckAmunitions(b, max, min) and max != 1)
+	void(*action[])(int*) = { Gun,  Arrow, Riffle };
+rep:
+	if (max == 2 and b[max] < 9)
+	{
+		max = findMaxelemofArray(b, 2);
+		goto rep;
+	}
+	if (b[max] > 0)
 	{
 		return action[max];
 	}
 	else
-		if (CheckAmunitions(b, max, min))
-		{
-			return action[max];
-		}
-		else
-		{
-			PrintText("Патроны закончились!", 10, 0);
-			exit(0);
-		}
+	{
+		PrintText("\nПатроны закончились!!", 9, 0);
+		exit(0);
+	}
+
 }
 
 
@@ -323,6 +325,7 @@ void UserValue(int* b, int count, int index)//индекс 2 для защиты
 
 void addCart(int* a, int index, int amount, void(*addvalue)(int* b, int count, int index2) = MinValue)
 {
+
 	PrintText("\nТекущее количество боеприпасов : \n", 5, 0);
 	for (int i = 0; i < 3; i++)
 	{
@@ -339,9 +342,6 @@ void addCart(int* a, int index, int amount, void(*addvalue)(int* b, int count, i
 	}
 	cout << endl;
 }
-
-
-
 
 
 void FindChest(int* bullet, int& count, int rand_mov_value)
@@ -363,7 +363,7 @@ void FindChest(int* bullet, int& count, int rand_mov_value)
 
 void ShowStatusBar(int* b)
 {
-	PrintText("\n       Количество боеприпасов\n", 10, 0);
+	PrintText("\nКоличество боеприпасов(E-убрать/показать панель - при следующем ходе)\n", 10, 0);
 	for (int c = 0; c < 3; c++)
 	{
 		if (c == 0 or c == 2)
@@ -376,12 +376,15 @@ void ShowStatusBar(int* b)
 		if (c == 1)
 		{
 			cout << "Gun = " << b[0];
-			cout << "    Riffle = " << b[1];
-			cout << "    Arrow = " << b[2];
+			cout << "    Arrow = " << b[1];
+			cout << "    Riffle = " << b[2];
+
 		}
 		cout << endl;
 	}
 }
+
+
 
 
 int main()
@@ -390,17 +393,17 @@ int main()
 	srand(time(0));
 
 	int rand_mov_value;
-	int value;
-	int bullet[3] = {25,25,25};// Gun RIffle Arrow
+	int bullet[3] = { 25,25,25 };// Gun RIffle Arrow
 	void(*action) (int*);
-	void(*shot_specific[3])(int* b) = { Gun, Riffle, Arrow };
+	void(*shot_specific[3])(int* b) = { Gun,  Arrow , Riffle };
 	void(*preset[6])() = { Preset, Preset2, Preset3, Preset4, Preset5, Preset6 };
 	int count = 0;
+	bool check = true;
 	int choice;
 	char c;
 	for (int i = 0; i < 6; i++)
 	{
-		setcolor(rand() % 14+1, 0);
+		setcolor(rand() % 14 + 1, 0);
 		preset[i]();
 		Sleep(2000);
 	}
@@ -409,21 +412,20 @@ int main()
 		if (count == 0)
 		{
 			rand_mov_value = rand() % 20 + 10;
-		}
-		count++;
+		}		
 		FindChest(bullet, count, rand_mov_value);//Нашли бонусный сундук, и добавили патроны в обоймы
 		action = shot(bullet);
 		c = _getch();
 		switch (c)
 		{
-		case 'g': if (CheckAmunitions(bullet, 0, 1)) shot_specific[0](bullet); else PrintText("Патроны оф, смените оружие", 8, 0);	break;
-		case 'a': if (CheckAmunitions(bullet, 2, 1)) shot_specific[2](bullet); else PrintText("Патроны оф, смените оружие", 8, 0);	break;
-		case 'r': if (CheckAmunitions(bullet, 1, 10)) shot_specific[1](bullet); else PrintText("Патроны оф, смените оружие", 8, 0);	break;
+		case 'g': if (CheckAmunitions(bullet, 0, 1)) shot_specific[0](bullet); else PrintText("Патроны оф, смените оружие", 8, 0); count++;	break;
+		case 'a': if (CheckAmunitions(bullet, 1, 1)) shot_specific[1](bullet); else PrintText("Патроны оф, смените оружие", 8, 0); count++;	break;
+		case 'r': if (CheckAmunitions(bullet, 2, 10)) shot_specific[2](bullet); else PrintText("Патроны оф, смените оружие", 8, 0); count++;	break;
+		case 'e': if (check) check = false; else check = true;
+			break;
 		case 27: exit(0);
-		default: action(bullet); break;
+		default: action(bullet); count++; break;
 		}
-		ShowStatusBar(bullet);
+		if (check)	ShowStatusBar(bullet);
 	} while (true);
-
-
 }
