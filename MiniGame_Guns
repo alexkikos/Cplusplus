@@ -1,32 +1,52 @@
+#include<iostream>
+#include<iomanip>
+#include<Windows.h>
+#include<algorithm>
+#include<typeinfo>
+#include<string>
+#include<conio.h>
+
+using namespace std;
 
 
-
-
-void(*message(int h))()
+enum ConsoleColor
 {
-	if (h < 12)
-	{
-		return GoodMon;
-	}
-	else return GodEvening;
+	Black = 0, Blue = 1, Green = 2, Cyan = 3, Red = 4, Magenta = 5, Brown = 6, LightGray = 7, DarkGray = 8,
+	LightBlue = 9, LightGreen = 10, LightCyan = 11, LightRed = 12, LightMagenta = 13, Yellow = 14, White = 15
+};
+
+void setcolor(int text, int background)
+{
+	HANDLE hStdOut = GetStdHandle(STD_OUTPUT_HANDLE);
+	SetConsoleTextAttribute(hStdOut, (WORD)((background << 4) | text));
 }
 
 
-int(*action())(int, int)
+void ConvertCharToInt(char& a)
 {
-	int(*oper[])(int, int) = { Sum,Mult,Div };
-	int choice;
-	cout << "Выбрать операцию 1 '+' 2 '*' 3 '/' : ";
-	cin >> choice;
-	return oper[choice - 1];
+	int b;
+	b = (int)a - (int) '0';
+	a = b;
 }
 
 
+void PrintText2(string s, int a, int color_text = 1, int color_background = 0)
+{
+	setcolor(color_text, color_background);
+	cout << s << a;
+	setcolor(White, Black);
+}
 
+void PrintText(string s, int color_text = 1, int color_background = 6)
+{
+	setcolor(color_text, color_background);
+	cout << s;
+	setcolor(White, Black);
+}
 
 void Gun(int* b)
 {
-
+	cout << endl;
 	cout << "+-- ^ ----------, --------, ---- - , -------- ^ -, " << endl;
 	cout << "| |||||||||   `------- - '        |              0 " << endl;
 	cout << "`+------------------------------- ^ -------------|" << endl;
@@ -46,6 +66,7 @@ void Gun(int* b)
 
 void Riffle(int* b)
 {
+	cout << endl;
 	cout << "________________________________________¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶" << endl;
 	cout << "	_______________________________¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶__" << endl;
 	cout << "________________________¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶_____________" << endl;
@@ -65,7 +86,7 @@ void Riffle(int* b)
 
 void Arrow(int* b)
 {
-
+	cout << endl;
 	cout << "			 4$$ - ." << endl;
 	cout << "			 4 ." << endl;
 	cout << "			 4 ^ ." << endl;
@@ -86,94 +107,141 @@ void Arrow(int* b)
 	cout << "			 J." << endl;
 	cout << endl;
 	b[2] -= 1;
+
 }
 
 
-int findMaxelem(int* a, int number, bool c = true)
+bool CheckAmunitions(int* a, int number, int minshot)
+{
+	if (a[number] >= minshot)
+	{
+		return true;
+	}
+	else
+		return false;
+}
+
+
+
+
+bool FindMaxElem(int b, int max1)
+{
+	if (b > max1)
+	{
+		return true;
+	}
+	else return false;
+}
+
+bool FindMinElem(int b, int max1)
+{
+	if (max1 > b)
+	{
+		return true;
+	}
+	else return false;
+}
+
+int findMaxelemofArray(int* a, int number, bool(*check)(int b, int max1) = FindMaxElem)//ПОКА НЕ ВЗЯЛ МАКС ПО АДРЕСУ НЕ СРАБАТЫВАЛА ПРОВЕРКА
 {
 
 	int max = a[0], imax = 0;
 	for (int i = 0; i < number; i++)
 	{
-		if (c)
+		if (check(a[i], max))
 		{
-			if (a[i] > max)
-			{
-				max = a[i];
-				imax = i;
-			}
+			max = a[i];
+			imax = i;
 		}
-		else
-		{
-			if (max > a[i])
-			{
-				max = a[i];
-				imax = i;
-			}
-		}
-
 	}
 	return imax;
 }
 
+
+
 void(*shot(int* b))(int*)
 {
-	int max = findMaxelem(b, 3);
+	int min;
+	int max = findMaxelemofArray(b, 3);
 	void(*action[])(int*) = { Gun, Riffle, Arrow };
-	if (max == 1 and b[max] > 9)
+	(max == 1) ? min = 10 : min = 1;
+	if (CheckAmunitions(b, max, min) and max != 1)
 	{
 		return action[max];
 	}
 	else
-		if (b[max] > 0)
+		if (CheckAmunitions(b, max, min))
 		{
 			return action[max];
 		}
 		else
 		{
-			return NULL;
+			PrintText("Патроны закончились!", 10, 0);
+			exit(0);
 		}
-
 }
 
 
 void finder1(int a)
 {
-
-	cout << "  _________________" << endl;
-	cout << "/ \________;;________\"\"" << endl;
-	cout << "| /                 /" << endl;
-	cout << "` .   ())oo()     ." << endl;
-	cout << "  | \(% () * ^^() ^|" << endl;
-	cout << " %|  |-% ----------|" << endl;
-	cout << "%  \ |%   ))       |" << endl;
-	cout << "%   \|% ___________|" << endl;
-	cout << "ВОУ ВЫ НАШЛИ СУНДУК С ПАТРОНАМИ!!! И ИХ КОЛИЧЕСТВО = " << a << endl;
+	cout << endl;
+	setcolor(Green, Black);
+	cout << "                  {}\n";
+	cout << "  ,   A           {}\n";
+	cout << " / \\, | ,        .--.\n";
+	cout << "|  =|= >        /.--.\\\n";
+	cout << " \\ /` | `       |====|\n";
+	cout << "  `   |         |`::`|\n";
+	cout << "      |     .-;`\\..../`;_.-^-._\n";
+	cout << "     /\\\\/  /  |...::..|`   :   `|\n";
+	cout << "     |:'\\ |   /'''::''|   .:.    |\n";
+	cout << "      \\ /\\;-,/\\   ::  |..Chest |\n";
+	cout << "      |\\ <` >  >._::_.| ':Find:  |\n";
+	cout << "      | `""`_/   ^^/>/>  |   ':'  |\n";
+	cout << "      |       |       \\    :    /\n";
+	cout << "      |       |        \\   :   /\n";
+	cout << "      |       |___/\\___|`-.:.-`\n";
+	cout << "      |        \\_ || _/    `\n";
+	cout << "      |        <_ >< _>\n";
+	cout << "      |        |  ||  |\n";
+	cout << "      |        |  ||  |\n";
+	cout << "      |       _\\.:||:./_\n";
+	cout << "      | jgs  /____/\\____\\\n";
+	cout << "\n";
+	cout << ".:*~*:._.:*~*:._.:*~*:._.:*~*:._.:*~*:._.:*~*:._.:*~*:._.:*~*:._.:*~*:" << endl;
+	setcolor(White, Black);
+	PrintText2("ВОУ ВЫ НАШЛИ СУНДУК С ПАТРОНАМИ!!! И ИХ КОЛИЧЕСТВО = ", a, 3, 0);
 }
 
 
 
-void addCart(int* a, int index, int amount, bool min = true)
+
+void MinValue(int* b, int count, int index)
 {
-	cout << "\nТекущее количество боеприпасов:\n";
+	int imin = findMaxelemofArray(b, 3, FindMinElem);
+	b[imin] += count;
+}
+
+void UserValue(int* b, int count, int index)//индекс 2 для защиты от ввода левых значений, к примеру у нас 3 пушки,пользователь ввел 5, поплнится по дефолту автомат
+{
+	if (index > 3 or index < 0) index = 2;//если ввели левый индекс по умолчанию пополним автомат
+	b[index - 1] += count;
+}
+
+
+
+void addCart(int* a, int index, int amount, void(*addvalue)(int* b, int count, int index2) = MinValue)
+{
+
+	PrintText("\nТекущее количество боеприпасов : \n", 5, 0);
 	for (int i = 0; i < 3; i++)
 	{
 		cout << i + 1 << "==" << a[i];
 		cout << endl;
 	}
-
-	if (min == false)
-	{
-		int imin = findMaxelem(a, 3, false);
-		a[imin] += amount;
-	}
-	else
-	{
-		if (index > 3 or index < 0) index = 2;//если ввели левый индекс по умолчанию пополним автомат
-		a[index - 1] += amount;
-	}
+	addvalue(a, amount, index);
 	cout << "Пополнение успешно!";
-	cout << "\nколичество боеприпасов после пополнения:\n";
+	PrintText("\nколичество боеприпасов после пополнения:\n", 5, 0);
 	for (int i = 0; i < 3; i++)
 	{
 		cout << i + 1 << "==" << a[i];
@@ -183,19 +251,47 @@ void addCart(int* a, int index, int amount, bool min = true)
 }
 
 
-void FindChest(int *bullet, int &count, int rand_mov_value)
-{
 
+
+
+
+
+void FindChest(int* bullet, int& count, int rand_mov_value)
+{
 	if (rand_mov_value == count)
 	{
 		system("cls");
-		int c;
+		char c;
 		count = 0;
 		int value = rand() % (30 - 1 + 1) + 1;//количество патронов рандомное
-		finder1(value);
-		cout << "\nВыберите номер оружия для пополнения, 0 - пополнить оружие с минимальным количество патронов: ";
-		cin >> c;
-		if (c > 0)		addCart(bullet, c, value); else addCart(bullet, c, value, false);
+		finder1(value);//вывожу картинку с сообщением о нахождении сундука
+		PrintText("\nВыберите номер оружия для пополнения '1' '2' '3', любой другой символ - пополнить оружие с минимальным количество патронов : ", 3, 0);
+		c = _getch();
+		ConvertCharToInt(c);
+		if (c == 1 or c == 2 or c == 3)	addCart(bullet, c, value, UserValue);   else addCart(bullet, c, value);
+	}
+}
+
+
+void ShowStatusBar(int* b)
+{
+	PrintText("\n       Количество боеприпасов\n", 10, 0);
+	for (int c = 0; c < 3; c++)
+	{
+		if (c == 0 or c == 2)
+		{
+			for (int i = 0; i < 40; i++)
+			{
+				PrintText("#", 11, 0);
+			}
+		}
+		if (c == 1)
+		{
+			cout << "Gun = " << b[0];
+			cout << "    Riffle = " << b[1];
+			cout << "    Arrow = " << b[2];
+		}
+		cout << endl;
 	}
 }
 
@@ -204,30 +300,35 @@ int main()
 {
 	setlocale(LC_ALL, "");
 	srand(time(0));
+
 	int rand_mov_value;
 	int value;
-	int bullet[3] = { 11, 11,11 };// Gun RIffle Arrow
+	int bullet[3] = {25,25,25};// Gun RIffle Arrow
 	void(*action) (int*);
-	int c, count = 0;
-	while (true)
+	void(*shot_specific[3])(int* b) = { Gun, Riffle, Arrow };
+	int count = 0;
+	int choice;
+	char c;
+	do
 	{
 		if (count == 0)
 		{
-			rand_mov_value = rand() % 5 + 1;
+			rand_mov_value = rand() % 20 + 10;
 		}
 		count++;
-		FindChest(bullet, count, rand_mov_value);
+		FindChest(bullet, count, rand_mov_value);//Нашли бонусный сундук, и добавили патроны в обоймы
 		action = shot(bullet);
-		if (action != NULL)
+		c = _getch();
+		switch (c)
 		{
-			action(bullet);
+		case 'g': if (CheckAmunitions(bullet, 0, 1)) shot_specific[0](bullet); else PrintText("Патроны оф, смените оружие", 8, 0);	break;
+		case 'a': if (CheckAmunitions(bullet, 2, 1)) shot_specific[2](bullet); else PrintText("Патроны оф, смените оружие", 8, 0);	break;
+		case 'r': if (CheckAmunitions(bullet, 1, 10)) shot_specific[1](bullet); else PrintText("Патроны оф, смените оружие", 8, 0);	break;
+		case 27: exit(0);
+		default: action(bullet); break;
 		}
-		else
-		{
-			cout << "Патроны все закончились!";
-			break;
-		}
-		cin >> c;
-	}
-}
+		ShowStatusBar(bullet);
+	} while (true);
 
+
+}
