@@ -1,0 +1,190 @@
+//В задаче нужно оптимизировать движение маршруток по интервалу времени. Круг состоит из 10 маршруток, на остановке формируется очередь, каждые Т мин приходит
+// Т пассажиров, время движения 1 маршрутки Т. Необходимо собрать статистику очереди после каждой маршрутки, и сделать оптимизацию
+//в сторону уменьшения или увелечения очереди. Оптимизируемый параметр - время движения 1 маршрутки.
+
+#include<iostream>
+#include<iomanip>
+#include<Windows.h>
+#include<string>
+#include<conio.h>
+
+using namespace std;
+
+
+
+enum ConsoleColor
+{
+	Black = 0, Blue = 1, Green = 2, Cyan = 3, Red = 4, Magenta = 5, Brown = 6, LightGray = 7, DarkGray = 8,
+	LightBlue = 9, LightGreen = 10, LightCyan = 11, LightRed = 12, LightMagenta = 13, Yellow = 14, White = 15
+};
+
+void setcolor(int text, int background)
+{
+	HANDLE hStdOut = GetStdHandle(STD_OUTPUT_HANDLE);
+	SetConsoleTextAttribute(hStdOut, (WORD)((background << 4) | text));
+}
+
+
+template <class T1>
+void AddPasengerOnStop(T1*& a, int& size, int amount)//создаю очередь по 1 человеку
+{
+	T1* temp = new T1[size + 1];
+	for (int i = 0; i < size; i++)
+	{
+		temp[i] = a[i];
+	}
+	temp[size] = 1;
+	a = temp;
+	size++;
+	if (amount > 1) AddPasengerOnStop(a, size, amount - 1);//рекурсируем если количество пассажиров за единицу времени более чем 1 прибывает для формирования очереди по 1
+}
+
+
+template <class T1>
+void AddAnalyticsParam(T1*& a, int& size, const int& size_of_passeg)//записываю каждые 10 мин, сколько людей осталось в очереди стоять после отправления машин
+{
+	int* temp = new int[size + 1];
+	for (int i = 0; i < size; i++)
+	{
+		temp[i] = a[i];
+	}
+	temp[size] = size_of_passeg;
+	a = temp;
+	size++;
+}
+
+
+template <class G>
+void RemovePassengerFromStop(G*& a, G& size, const int rand)
+{
+	cout << "\nПриехала машина с количеством свободных мест = " << rand;
+	G* temp = new G[size + 1];
+	int count = 0;
+	if (rand > 0)// 0 - все места заняты, в таком случаее очередь накапливается
+	{
+		for (int i = rand; i < size; i++)//загружаем наших пассажиров, к примеру мест 5, и с 6го места обновляем список очереди так, что 6ой будет первым.
+		{
+			temp[count++] = a[i];
+		}
+		delete[]a;
+		a = temp;
+		size = count;
+	}
+}
+
+template <class G>
+G ShowReportAverage(G* a, const int& size)
+{
+	G sum = 0;
+	for (int i = 0; i < size; i++)
+	{
+		sum += a[i];
+	}
+	return sum / size;
+}
+
+
+void MakeOptimization(int* optimization, const int& size_opti, const int time_formove_onecar, const  int opti_param, const int amount_of_pass_peertime, const int passenger_time_income, const int total_car)
+{
+	float result;
+	float average = ShowReportAverage(optimization, size_opti);
+	if (opti_param <= average)
+	{
+		result = ((average - opti_param) / total_car) * amount_of_pass_peertime * passenger_time_income;
+		result = time_formove_onecar - result - 3;
+		cout << "\nВремя движения 1 маршрута необходимо сократить с " << time_formove_onecar << " мин до " << result;
+	}
+	else
+	{
+		result = opti_param - average;
+		result /= amount_of_pass_peertime * passenger_time_income;//расчитываем минимальную очередь, для случая если очередей практически нет и нужно оптимизировать расходы
+		result += time_formove_onecar + 3; // 3- литерал компенсации среднего рандома
+		cout << "\nВремя движения 1 маршрута необходимо увеличить с " << time_formove_onecar << " минут до " << result;
+	}
+}
+
+template <class S>
+S FindTotalPesengers(S* a, const int& size_passenger)
+{
+	S sum = 0;
+	for (int i = 0; i < size_passenger; i++)
+	{
+		sum += a[i];
+	}
+	return sum;
+}
+
+
+
+
+void MainOperation(int& time_formove_onecar, const int totalcar, const int passenger_time_income, int* total_passengers, int& size_passenger, const int amount_of_pass_peertime, int*& optimization, int& size_opti, int opti_param = 0)
+{
+	int count = 0;
+	int check;
+	int numbercar = 1;
+	(passenger_time_income % 2 == 0) ? check = 0 : check = 1;
+	while (count <= time_formove_onecar * totalcar) //беру замер сразу с 1 круга, 10 машин по 10 минут
+	{
+		if (count % passenger_time_income == check and count != 0)
+		{
+			AddPasengerOnStop(total_passengers, size_passenger, amount_of_pass_peertime);
+		}
+		if (count % time_formove_onecar == check and count != 0)
+		{
+			int rsr = rand() % 7;
+			setcolor(10, 0);
+			cout << "\nТекущее количество пассажиров: " << FindTotalPesengers(total_passengers, size_passenger);
+			RemovePassengerFromStop(total_passengers, size_passenger, rsr);
+			setcolor(11, 0);
+			cout << "\nКоличество человек на остановке после отьезда машины № " << numbercar++ << " = " << FindTotalPesengers(total_passengers, size_passenger);
+			AddAnalyticsParam(optimization, size_opti, size_passenger);//вношу значения для анализа после каждых 10 минут отправления машины		
+		}
+		count++;
+	}
+}
+
+
+
+
+int main()
+{
+	setlocale(LC_ALL, "");
+
+	int* optimization = nullptr;//сюда паршу значения после каждого круга отработки машин ( 1 круг = 100мин)
+	int size_opti = 0;
+rep:
+	const int totalcar = 10;//общее количество машин на маршруте
+	int time_formove_onecar = 6;//время для движения 1 машины
+	int passenger_time_income = 2;// количество минут, каждые 2 минуты по 1 пассажиру
+	int amount_of_pass_peertime = 1;//прибытие количества пассажиров за ед. времени
+	int size_passenger = 0;//количество пассажиров обшее
+	int* total_passengers = nullptr;//формирую очередь пассажиров
+	int count = 0;//минуты
+	char c;
+	srand(time(0));
+	MainOperation(time_formove_onecar, totalcar, passenger_time_income, total_passengers, size_passenger, amount_of_pass_peertime, optimization, size_opti);
+	setcolor(13, 0);
+repenter:
+	cout << "\nПовторить замер для понимания общей статистики  ? y/n";//для более точных рещультатов, все значения продолжаю вносить в массив AddAnalytics
+	cout << "\nВывод среднего значения очереди, в статистике должно быть хотя бы 2 круга!!! - нажмите r";
+	c = _getch();
+	setcolor(11, 0);
+	if (c == 'y')
+	{
+		goto rep;
+	}
+	else
+		if (c == 'r')
+		{
+			cout << "\nСреднее значение очереди = " << ShowReportAverage(optimization, size_opti);
+		}
+		else goto repenter;
+	setcolor(14, 0);
+	int opti_param;
+	cout << "\nОптимизация времени ходки для 1 машины, введите желаемое количество очереди которое должно быть МАКСИМАЛЬНОЕ:";
+	cin >> opti_param;
+	MakeOptimization(optimization, size_opti, time_formove_onecar, opti_param, amount_of_pass_peertime, passenger_time_income, totalcar);
+	delete[] optimization;
+	delete[] total_passengers;
+
+}
