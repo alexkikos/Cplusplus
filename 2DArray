@@ -1,0 +1,465 @@
+#define _CRT_SECURE_NO_WARNINGS
+using namespace std;
+#include<iostream>
+#include<iomanip>
+#include<cmath>
+#include<Windows.h>
+#include<algorithm>
+#include<typeinfo>
+#include<string>
+#include<conio.h>
+//#include "Array1D.h"
+//#include"Function.h"
+//#include "Array2D.h"
+//#include "StringsChar.h"
+//
+
+////вспомагательные -------ДЗ НИЖЕ
+/////////////////доп функции для 1мерного////////
+template <class T>
+void ShowArray(T*& a)
+{
+	int g = _msize(a) / sizeof(T);
+	for (int i = 0; i < g; i++)
+	{
+		cout << a[i] << " ";
+	}
+	cout << endl;
+}
+template <class T>
+void ShowArray2D(T**& a, int& row, int& col)
+{
+	for (int i = 0; i < row; i++)
+	{
+		for (int j = 0; j < col; j++)
+		{
+			cout << setw(4) << a[i][j] << " ";
+		}
+		cout << endl;
+	}
+
+}
+template <class T>
+void AddArray2D(T**& a, int count_row_array, int col, int start = 0, int off = 100)
+{
+
+	for (int i = 0; i < count_row_array; i++)
+	{
+		for (int j = 0; j < col; j++)
+		{
+			a[i][j] = rand() % (off - start + 1) + start;
+		}
+	}
+}
+template <class T>
+void CreateArr2D(T**& a, int row, int col)
+{
+	a = new T * [row];
+	for (int i = 0; i < row; i++)
+	{
+		a[i] = new T[col];
+	}
+}
+template <class T, class T2>
+void ADD_ELEMENTS_ARRAY_DYNAMIC(T*& a, int& size, T2 number)
+{
+
+	T* p = new T[size + 1];
+	for (int i = 0; i < size; i++)
+	{
+		p[i] = a[i];
+	}
+	p[size] = number;
+	size++;
+	delete[]a;
+	a = p;
+}
+
+///////////////////////////////////
+
+
+
+
+
+
+//////////////////Задача 1////////
+template <class T>
+void AddNamesInArr2D(T** const& a, const int size_string)
+{
+	int row = _msize(a) / sizeof(int);
+	for (int i = 0; i < row; i++)
+	{
+		char* names = new char[size_string];
+		cout << "\nФамилия № " << i + 1 << " :";
+		gets_s(names, size_string);
+		a[i] = names;
+	}
+
+}
+
+bool MinMax(int a, int b)
+{
+	return (a > b) ? true : false;
+}
+
+bool MaxMin(int a, int b)
+{
+	return (a < b) ? true : false;
+}
+
+template <class T>
+void SortNamesInArr2D(T** const& a, bool(*method)(int a, int b) = MinMax)
+{
+	int row = _msize(a) / sizeof(int);
+	for (int i = 0; i < row - 1; i++)
+	{
+		for (int c = i + 1; c < row; c++)
+		{
+			if (method(strlen(a[i]), strlen(a[c]))) 	swap(a[i], a[c]);//пузырь
+		}
+	}
+}
+
+
+template <class G>
+void ShowNamesArr2D(G**const& fio)
+{
+	cout << "Отсортированные фамилии:\n";
+	int end = _msize(fio) / sizeof(int);
+	for (int i = 0; i < end; i++)
+	{
+		cout << "Фамилия № " << i + 1 << " : " << fio[i] << endl;
+
+	}
+	for (int i = 0; i < end; i++)
+	{
+		delete[] fio[i];
+	}
+	delete[] fio; //закончили работу, все чистим 
+}
+//////////////////////////////////////////////
+
+
+
+
+
+
+
+
+/////////////ЗАДАЧА 2/////////////////
+template <class T>
+T FindSizeOfArray2D(T** a)
+{
+	return _msize(a) / sizeof(T);
+}
+
+
+
+template <class H>
+bool FindCoom(H number, H** b, const int column, H* odnomer = nullptr)
+{
+	if (odnomer == nullptr)
+	{
+		int row_a = FindSizeOfArray2D(b);
+		for (int i = 0; i < row_a; i++)
+		{
+			for (int j = 0; j < column; j++)
+			{
+				if (number == b[i][j])
+				{
+					return true;
+				}
+			}
+		}
+	}
+	else
+	{
+		int row_a = _msize(odnomer) / sizeof(int);
+		for (int i = 0; i < row_a; i++)
+		{
+			if (number == odnomer[i])
+			{
+				return true;
+			}
+		}
+	}
+	return false;
+}
+
+
+template <class H>
+H* AllValue(H** a, const int cola, H** b, const int colb, H** c, const int colc)//Общие значения для А Б С без повторений
+{
+	int row_a = FindSizeOfArray2D(a);
+	int count = 0;
+	H* odnomer = new H;
+	for (int i = 0; i < row_a; i++)
+	{
+		for (int j = 0; j < cola; j++)
+		{
+			if (FindCoom(a[i][j], b, colb) and FindCoom(a[i][j], c, colc) and !FindCoom(a[i][j], c, colc, odnomer))
+			{
+				ADD_ELEMENTS_ARRAY_DYNAMIC(odnomer, count, a[i][j]);
+			}
+		}
+	}
+
+	if (count > 0)
+	{
+		return odnomer;
+	}
+	else delete[] odnomer;
+}
+
+template <class H>
+H* OnlyTwo(H** a, const int cola, H** c, const int colc, H** b, const int colb)//Общие значения для А С
+{
+	int row_a = FindSizeOfArray2D(a);
+	int count = 0;
+	H* odnomer = new H;
+	for (int i = 0; i < row_a; i++)
+	{
+		for (int j = 0; j < cola; j++)
+		{
+			if (FindCoom(a[i][j], c, colc) and !FindCoom(a[i][j], c, colc, odnomer))
+			{
+				ADD_ELEMENTS_ARRAY_DYNAMIC(odnomer, count, a[i][j]);
+			}
+		}
+	}
+
+	if (count > 0)
+	{
+		return odnomer;
+	}
+	else delete[] odnomer;
+}
+
+template <class H>
+H* OnlyNegativeValue(H** a, const int cola, H** b, const int colb, H** c, const int colc)//Все отрицательные значения А В С, без повторений
+{
+	int row_a = FindSizeOfArray2D(a);
+	int count = 0;
+	H* odnomer = new H;
+	for (int i = 0; i < row_a; i++)
+	{
+		for (int j = 0; j < cola; j++)
+		{
+			if (a[i][j] >= 0)
+			{
+				continue;
+			}
+			if (FindCoom(a[i][j], b, colb) and FindCoom(a[i][j], c, colc) and !FindCoom(a[i][j], c, colc, odnomer))
+			{
+
+				ADD_ELEMENTS_ARRAY_DYNAMIC(odnomer, count, a[i][j]);
+			}
+		}
+	}
+	
+	if (count > 0)
+	{
+		return odnomer;
+	}
+	else delete[] odnomer;
+
+}
+
+
+template <class C>
+bool Uniq2D(C number, C** a, const int cola)
+{
+	int count = 0;
+	int row_a = FindSizeOfArray2D(a);
+	for (int i = 0; i < row_a; i++)
+	{
+		for (int j = 0; j < cola; j++)
+		{
+			if (a[i][j] == number)
+			{
+				count++;
+			}
+
+		}
+	}
+	return  (count > 1) ? true : false;
+}
+
+template <class H>
+H* OnlyUniques(H** a, const int cola, H** b, const int colb, H** c, const int colc)//Которые есть в одном массиве и нету в других, и не повторяется в этом массиве
+{
+	int row_a = FindSizeOfArray2D(a);
+	int row_b = FindSizeOfArray2D(b);
+	int row_c = FindSizeOfArray2D(c);
+	int count = 0;
+	H* odnomer = new H;
+	for (int i = 0; i < row_a; i++)
+	{
+		for (int j = 0; j < cola; j++)
+		{
+			if (!FindCoom(a[i][j], b, colb) and !FindCoom(a[i][j], c, colc) and !Uniq2D(a[i][j], a, cola))
+			{
+				ADD_ELEMENTS_ARRAY_DYNAMIC(odnomer, count, a[i][j]);
+			}
+		}
+	}
+	for (int i = 0; i < row_b; i++)
+	{
+		for (int j = 0; j < colb; j++)
+		{
+			if (!FindCoom(b[i][j], a, cola) and !FindCoom(b[i][j], c, colc) and !Uniq2D(b[i][j], b, colb))
+			{
+				ADD_ELEMENTS_ARRAY_DYNAMIC(odnomer, count, b[i][j]);
+			}
+		}
+	}
+
+	for (int i = 0; i < row_c; i++)
+	{
+		for (int j = 0; j < colc; j++)
+		{
+			if (!FindCoom(c[i][j], a, cola) and !FindCoom(c[i][j], b, colb) and !Uniq2D(c[i][j], c, colc))
+			{
+				ADD_ELEMENTS_ARRAY_DYNAMIC(odnomer, count, c[i][j]);
+			}
+		}
+	}
+	if (count > 0)
+	{
+		return odnomer;
+	}
+	else delete[] odnomer;
+}
+
+
+
+
+template <class H>
+H* FindCommonValues(H** a, const int cola, H** b, const int colb, H** c, const int colc, H* (*findvalue) (H**, const int, H**, const int, H**, const int) = AllValue)
+{
+	H* w = findvalue(a, cola, b, colb, c, colc);
+	return w;
+}
+
+
+
+
+
+int main()
+{
+	setlocale(LC_ALL, "");
+	srand(time(0));
+	///ЗАДАЧА 2
+	int rowa, cola, rowb, colb, rowc, colc;
+	int** a = nullptr, ** b = nullptr, ** c = nullptr;
+	int start = -10;
+	int off = 10;
+start:
+	cout << "Введите размер массива 1: ";
+	cin >> rowa >> cola;
+	if (rowa > 0 and cola > 0)
+	{
+		CreateArr2D(a, rowa, cola);
+		AddArray2D(a, rowa, cola, start, off);
+	}
+	else
+	{
+		cout << "error input";
+		goto start;
+	}
+start2:
+	cout << "Введите размер массива 2: ";
+	cin >> rowb >> colb;
+	if (rowb > 0 and colb > 0)
+	{
+		CreateArr2D(b, rowb, colb);
+		AddArray2D(b, rowb, colb, start, off);
+	}
+	else
+	{
+		cout << "error input";
+		goto start2;
+	}
+start3:
+
+	cout << "Введите размер массива 3: ";
+	cin >> rowc >> colc;
+	if (rowc > 0 and colc > 0)
+	{
+		CreateArr2D(c, rowc, colc);
+		AddArray2D(c, rowc, colc, start, off);
+		cout << endl;
+	}
+	else
+	{
+		cout << "error input";
+		goto start3;
+	}
+
+	cout << "Массив А\n";
+	ShowArray2D(a, rowa, cola);
+	cout << endl;
+	cout << "Массив B\n";
+	ShowArray2D(b, rowb, colb);
+	cout << endl;
+	cout << "Массив C\n";
+	ShowArray2D(c, rowc, colc);
+	cout << endl;
+	int* odnomer = nullptr;
+	odnomer = FindCommonValues(a, cola, b, colb, c, colc);
+	if (odnomer != nullptr)
+	{
+		cout << "Общие значения для А B C без повторений: ";
+		ShowArray(odnomer);
+	}
+	else cout << "Значений общих для А  B  С нет!!\n";
+
+
+	delete[] odnomer;
+	odnomer = nullptr;
+	odnomer = FindCommonValues(a, cola, c, colc, b, colb, OnlyTwo);
+	if (odnomer != nullptr)
+	{
+		cout << "Общие значения для А C без повторений: ";
+		ShowArray(odnomer);
+	}
+	else cout << "Значений общих для А С нет!!\n";
+
+	delete[] odnomer;
+	odnomer = nullptr;
+	odnomer = FindCommonValues(a, cola, b, colb, c, colc, OnlyNegativeValue);
+	if (odnomer != nullptr)
+	{
+		cout << "Общие отрицательные значения для А B C без повторений: ";
+		ShowArray(odnomer);
+	}
+	else cout << "Значений общих отрицательныъ для А В С нет!!\n";
+
+
+
+	delete[] odnomer;
+	odnomer = nullptr;
+	odnomer = FindCommonValues(a, cola, b, colb, c, colc, OnlyUniques);
+	if (odnomer != nullptr)
+	{
+		cout << "Уникальные  значения  А B C без повторений: ";
+		ShowArray(odnomer);
+	}
+	else cout << "Уникальных значений нет!!\n";
+	delete[] odnomer;
+	odnomer = nullptr;
+
+
+
+
+	//////ЗАДАЧА 1
+	cout << endl;
+	int row = 5;
+	int size_of_string = 100;
+	char** fio = nullptr;
+	CreateArr2D(fio, row, size_of_string);//100 - резер памяти под 100 символо для фамилий
+	AddNamesInArr2D(fio, size_of_string);
+	SortNamesInArr2D(fio);
+	ShowNamesArr2D(fio);
+  system("pause");
+}
